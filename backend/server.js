@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -11,7 +12,7 @@ const router = express.Router();
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('');
+mongoose.connect('mongodb://localhost:27017/issues');
 
 const connection = mongoose.connection;
 
@@ -37,7 +38,7 @@ router.route('/issues/:id').get(async (req, res) => {
   }
 });
 
-router.route('/issues/add').post((req, res) => {
+router.route('/issues/add').post(async (req, res) => {
   try {
     let issue = new Issue(req.body);
     await issue.save();
@@ -67,7 +68,7 @@ router.route('/issues/update/:id').post(async (req, res) => {
   }
 });
 
-router.route('/issues/delete/:id').get((req, res) => {
+router.route('/issues/delete/:id').get(async (req, res) => {
   try {
     const issue = await Issue.findByIdAndRemove({ _id: req.params.id });
     res.json('Remove successfully');

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-let Issue = new Schema({
+const Issue = new Schema({
   title: {
     type: String
   },
@@ -18,6 +18,10 @@ let Issue = new Schema({
   status: {
     type: String,
     default: 'Open'
+  },
+  comments: {
+    type: Array,
+    default: []
   }
 });
 

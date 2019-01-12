@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as moment from 'moment';
 
 import { MatSnackBar } from '@angular/material';
 
 import { IssueService } from '../../issue.service';
-import { Issue } from '../../issue.model';
 
 @Component({
   selector: 'app-edit',
@@ -17,9 +17,11 @@ export class EditComponent implements OnInit {
   id: String;
   issue: any = {};
   updateForm: FormGroup;
+  commentForm: FormGroup;
+  hasComments: boolean = false;
 
   constructor(private issueService: IssueService, private router: Router, private route: ActivatedRoute, private snackBar: MatSnackBar, private fb: FormBuilder) {
-    this.createForm();
+    this.createForms();
   }
 
   ngOnInit() {
@@ -32,17 +34,38 @@ export class EditComponent implements OnInit {
         this.updateForm.get('description').setValue(this.issue.description);
         this.updateForm.get('severity').setValue(this.issue.severity);
         this.updateForm.get('status').setValue(this.issue.status);
+
+        this.hasComments = !!this.issue.comments.length;
       });
     });
   }
 
-  createForm() {
+  createForms() {
     this.updateForm = this.fb.group({
       title: [ '', Validators.required ],
       responsible: '',
       description: '',
       severity: '',
-      status: ''
+      status: '',
+    });
+    this.commentForm = this.fb.group({
+      name: [ '', Validators.required ],
+      message: [ '', Validators.required ]
+    });
+  }
+
+  addComment(commentName, commentMessage) {
+    const timestamp = moment().format('MM/DD/YYYY h:mm A');
+    this.issue.comments.push({
+      name: commentName,
+      message: commentMessage,
+      timestamp
+    });
+    this.hasComments = true;
+    this.commentForm.get('name').setValue('');
+    this.commentForm.get('message').setValue('');
+    this.issueService.addComment(this.id, commentName, commentMessage, timestamp).subscribe(() => {
+      this.snackBar.open('Comment added.', 'OK', { duration: 3000 });
     });
   }
 

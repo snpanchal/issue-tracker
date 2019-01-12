@@ -78,8 +78,6 @@ router.route('/issues/delete/:id').get(async (req, res) => {
 });
 
 router.route('/issues/comment/:id').post(async (req, res) => {
-  console.log('req');
-  console.log(req.body)
   const issue = await Issue.findById(req.params.id);
   if (!issue) {
     return next(new Error('Could not find issue'));

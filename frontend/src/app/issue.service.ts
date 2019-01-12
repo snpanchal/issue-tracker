@@ -44,4 +44,14 @@ export class IssueService {
   deleteIssue(id) {
     return this.http.get(`${this.uri}/issues/delete/${id}`);
   }
+
+  addComment(id, name, message, timestamp) {
+    const comment = {
+      name,
+      message,
+      timestamp
+    };
+
+    return this.http.post(`${this.uri}/issues/comment/${id}`, comment);
+  }
 }

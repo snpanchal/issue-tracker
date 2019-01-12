@@ -78,21 +78,24 @@ router.route('/issues/delete/:id').get(async (req, res) => {
 });
 
 router.route('/issues/comment/:id').post(async (req, res) => {
-  const issues = await Issue.findById(req.params.id);
+  console.log('req');
+  console.log(req.body)
+  const issue = await Issue.findById(req.params.id);
   if (!issue) {
     return next(new Error('Could not find issue'));
   } else {
     const newComment = {
       name: req.body.name,
-      message: req.body.message
+      message: req.body.message,
+      timestamp: req.body.timestamp
     }
     issue.comments.push(newComment);
 
     try {
-      await issues.save();
+      await issue.save();
       res.json('Comment added');
     } catch (err) {
-      res.status(400).send('Update failed');
+      res.status(400).send('Failed to add comment');
     }
   }
 });

@@ -2,7 +2,7 @@
   <br>
   <mat-card>
     <section class="mat-typography">
-      <h3>Update Issue</h3>
+      <h3>View and Update Issue</h3>
     </section>
     <mat-divider></mat-divider>
     <br>
@@ -13,7 +13,7 @@
       <mat-form-field class="field-full-width">
         <input matInput placeholder="Responsible" formControlName="responsible" #responsible>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="field-full-width">
         <textarea matInput placeholder="Description" formControlName="description" #description></textarea>
       </mat-form-field>
       <mat-form-field class="field-full-width">
@@ -34,6 +34,31 @@
       <br><br>
       <button mat-raised-button color="accent" routerLink="/list">Back</button>&nbsp;
       <button type="submit" (click)="updateIssue(title.value, responsible.value, description.value, severity.value, status.value)" [disabled]="updateForm.pristine || updateForm.invalid" mat-raised-button color="primary">Save</button>
+    </form>
+  </mat-card>
+  <mat-card>
+    <section class="mat-typography">
+      <h3>Comments</h3>
+    </section>
+    <mat-divider></mat-divider>
+    <p  class="no-comments" *ngIf="!hasComments">No comments yet!</p>
+    <ul *ngIf="hasComments" class="comment-list mat-typography">
+      <li *ngFor="let comment of issue.comments">
+        <p class="comment-name">{{ comment.name }}</p>
+        <p class="comment-time">{{ comment.timestamp }}</p>
+        <p>{{ comment.message }}</p>
+        <mat-divider></mat-divider>
+      </li>
+    </ul>
+    <form [formGroup]="commentForm" class="comment-form">
+      <p>Add a comment</p>
+      <mat-form-field class="field-full-width">
+        <input matInput placeholder="Name" formControlName="name" #commentName>
+      </mat-form-field>
+      <mat-form-field class="field-full-width">
+        <textarea matInput placeholder="Comment" formControlName="message" #commentMessage></textarea>
+      </mat-form-field>
+      <button type="submit" (click)="addComment(commentName.value, commentMessage.value)" [disabled]="commentForm.pristine || commentForm.invalid" mat-raised-button color="primary">Add Comment</button>
     </form>
   </mat-card>
 </div>

@@ -6,3 +6,31 @@
 .field-full-width {
   width: 100%;
 }
+
+.textarea-field {
+  width: 60%;
+}
+
+.comment-list {
+  list-style-type: none;
+}
+
+.comment-name {
+  padding-top: 12px;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+.comment-time {
+  color: gray;
+  font-size: 0.8em;
+}
+
+.no-comments {
+  padding-top: 12px;
+}
+
+.comment-form p {
+  padding-top: 12px;
+  margin: 0;
+}
